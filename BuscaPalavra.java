@@ -1,21 +1,83 @@
 import java.io.*;
+import java.lang.Math;
+
+class No {
+	
+	private String palavra;
+	private No proximo;
+
+	public No(String palavra) {
+		this.palavra = palavra;
+	}
+
+	public void setProximo(No no) {
+		proximo = no;
+	}
+
+	public No getProximo() {
+		return proximo;
+	}
+
+	public String getPalavra() {
+		return palavra;
+	}
+}
+
+class Lista {
+	
+	private No inicio;
+
+	public Lista() {
+		inicio = null;
+	}
+
+	public void adiciona(String palavra) {
+
+		No novo = new No(palavra);
+		
+		if(inicio == null) {
+			inicio = novo;
+		}
+		else {
+			No ultimo = inicio;
+			while(ultimo.getProximo() != null) {
+				ultimo = ultimo.getProximo();
+			}
+			ultimo.setProximo(novo);
+		}
+	}
+	
+	public String get(String palavra) {
+		No n = inicio;
+		while(n != null) {
+			if(n.getPalavra().equals(palavra)) {
+				return palavra;
+			}
+			n = n.getProximo();
+		}
+		return "";
+	}
+}
 
 class HashEntry {
 
-	private String chave;
-	private int valor;
+	private int chave;
+	private Lista palavras;
 
-	public HashEntry(String chave, int valor) {
-		this.chave = chave;
-		this.valor = valor;
+	public HashEntry() {
+		this.palavras = new Lista();
 	}
 
-	public String getChave() {
+	public int getChave() {
 		return chave;
 	}
 
-	public int getValor() {
-		return valor;
+	public Lista getPalavras() {
+		return palavras;
+	}
+	
+	public void setPalavras(Lista palavras) {
+		this.palavras = palavras;
 	}
 
 }
@@ -30,12 +92,22 @@ class HashMap {
 		this.tamanho = tamanho;
 		tabela = new HashEntry[tamanho];
 		for(int i = 0; i < tamanho; i++) {
-			tabela[i] = null;
+			tabela[i] = new HashEntry();
 		}
 	}
+	
+	private int hash(String palavra) {
+		return Math.abs(palavra.hashCode() % tamanho);
+	}
 
-	public int get(String chave) {
-		return tabela[]
+	public String get(String palavra) {
+		int hash = hash(palavra);
+		return tabela[hash].getPalavras().get(palavra);
+	}
+
+	public void put(String palavra) {
+		int hash = hash(palavra);
+		tabela[hash].getPalavras().adiciona(palavra);		
 	}
 
 }
@@ -43,21 +115,11 @@ class HashMap {
 // classe que implementa um Buscador de palavras
 public class BuscaPalavra{
 
-	private String [] palavras = null;
+	private HashMap palavras = null;
 
 	public BuscaPalavra(){
 
 	}
-
-
-	// metodo que faz a carga do arquivo de texto e guarda 
-	// cada palavra presente no arquivo no vetor "palavras".
-	// A carga do arquivo é feita em duas etapas. Na primeira
-	// lemos todo o arquivo para determinar o número de palavras
-	// presente no mesmo. Com o tamanho em mãos, alocamos o vetor
-	// "palavras" com a quantidade certa de posições. Em seguida
-	// é feita nova leitura, para guardar cada palavra presente
-	// no arquivo no vetor "palavras".
 
 	public void carregaArquivo(String nomeArquivo){
 
@@ -75,12 +137,12 @@ public class BuscaPalavra{
 				// particionamento da linha em palavras
 				partes = linha.split(" +");
 
-				// atualização o contador de palavras
+				// atualizacao o contador de palavras
 				contador += partes.length;
 			}
 
-			// alocação do vetor "palavras" com o tamanho correto
-			palavras = new String[contador];
+			// alocacao do vetor "palavras" com o tamanho correto
+			palavras = new HashMap(contador + 1);
 
 			// fechamento do arquivo...
 			in.close();
@@ -90,14 +152,14 @@ public class BuscaPalavra{
 			contador = 0;
 
 			// na segunda leitura, cada palavra 
-			// lida é guardada no vo vetor
+			// lida eh guardada no vo vetor
 			while( (linha = in.readLine()) != null ){
 
 				partes = linha.split(" +");
 
 				for(String s : partes){
 
-					palavras[contador] = s;
+					palavras.put(s);
 					contador++;
 				}	
 			}
@@ -108,41 +170,24 @@ public class BuscaPalavra{
 			e.printStackTrace();
 		}
 	}
-
-	// método que verifica se uma palavra existe ou não no
-	// conjunto de palavras carregadas do arquivo. Em caso
-	// de busca bem sucedida, devolve um vetor de uma posição
-	// contendo a palavra encontrada. Caso contrário devolve
-	// null. Devolver um vetor de uma posição com a palavra
-	// encontrada pode paracer meio estranho (bastaria devolver 
-	// um boolean) mas facilitará a extensão deste método 
-	// para também devolver os anagramas da palavra buscada.
-
+	
 	public String [] busca(String buscada){
 
 		if(palavras != null){
-
-			// para cada palavra presente no vetor "palavras"...
-			for(String p : palavras){
-	
-				// ... se a palavra for igual à palavra buscada...
-				if(p.equals(buscada)){
-
-					// ... então a busca foi bem sucedida. Criamos
-					// um vetor de uma posição e adicionamos ao mesmo
-					// a palavra encontrada.
-					String [] resultado = new String[1];
-					resultado[0] = p;
-					return resultado;
-				}
+		
+			String palavra = palavras.get(buscada);
+				
+			if(palavra.equals(buscada)) {
+					
+				String [] resultado = new String[1];
+				resultado[0] = palavra;
+				return resultado;
 			}
 		}
 		else{
-			System.out.println("Arquivo não foi carregado!");	
+			System.out.println("Arquivo nao foi carregado!");	
 		}
 	
-		// Se chegamos até aqui, ou o arquivo não foi carregado, ou 
-		// a palavra buscada não existe. Então devolvemos "null".
 		return null;
 	}
 }
