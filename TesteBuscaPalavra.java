@@ -13,8 +13,11 @@ public class TesteBuscaPalavra {
 			String [] resultado = bp.busca(p);
 
 			if(resultado != null){
-		
-				System.out.println("palavra " + resultado[0] + " encontrada."); 
+
+				for(String s : resultado) {
+					System.out.printf("%s ", s);
+				}
+				System.out.println();
 			}
 			else {
 
