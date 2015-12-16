@@ -1,7 +1,46 @@
 import java.io.*;
 
-// classe que implementa um Buscador de palavras
+class HashEntry {
 
+	private String chave;
+	private int valor;
+
+	public HashEntry(String chave, int valor) {
+		this.chave = chave;
+		this.valor = valor;
+	}
+
+	public String getChave() {
+		return chave;
+	}
+
+	public int getValor() {
+		return valor;
+	}
+
+}
+
+class HashMap {
+
+	private static int tamanho;
+
+	private HashEntry[] tabela;
+
+	public HashMap(int tamanho) {
+		this.tamanho = tamanho;
+		tabela = new HashEntry[tamanho];
+		for(int i = 0; i < tamanho; i++) {
+			tabela[i] = null;
+		}
+	}
+
+	public int get(String chave) {
+		return tabela[]
+	}
+
+}
+
+// classe que implementa um Buscador de palavras
 public class BuscaPalavra{
 
 	private String [] palavras = null;

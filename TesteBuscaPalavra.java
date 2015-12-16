@@ -11,7 +11,7 @@ public class TesteBuscaPalavra {
 		bp.carregaArquivo("texto.txt");
 		
 		// lista de palavras a serem pesquisadas
-		String [] palavras = { "carro", "cobra", "melão", "leão", "amarelo", "dever", "maçã" };
+		String [] palavras = { "carro", "cobra", "melão", "leão", "amarelo", "dever", "mouse" };
 
 		for(String p : palavras){
 
