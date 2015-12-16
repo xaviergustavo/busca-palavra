@@ -1,3 +1,6 @@
+// Nome: Gustavo Xavier Moreira
+// NUSP: 8623757
+
 import java.io.*;
 import java.lang.Math;
 
@@ -304,9 +307,8 @@ public class BuscaPalavra{
 				}
 			}
 			else {
-				resultado = new String[1];
-				
 				if(palavra.equals(buscada)) {
+					resultado = new String[1];
 					resultado[0] = palavra;
 					return resultado;
 				}
