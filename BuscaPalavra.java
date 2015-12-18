@@ -1,6 +1,3 @@
-// Nome: Gustavo Xavier Moreira
-// NUSP: 8623757
-
 import java.io.*;
 import java.lang.Math;
 
